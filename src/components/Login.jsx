@@ -47,7 +47,7 @@ function Login() {
                 {error && (
                     <p className="text-red-600 mt-8 text-center">{error}</p>
                 )}
-                <form onSubmit={handleSubmit(login)} className='mt-8 text-center'>   {/*on this handle submit method that you get from the  useform hook in this handlesubmit you pass your own method that you have created and the method which you want to run when the form gets submitted*/}
+                <form onSubmit={handleSubmit(login)} className='mt-8 text-center'>   {/*on this handle submit method that you get from the  useform hook in this handlesubmit you pass your own method that you have created and that method gets called when the form is submitted*/}
                     <div className='space-y-5'>
                         <Input
                             label="Email: "
