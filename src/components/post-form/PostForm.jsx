@@ -19,7 +19,7 @@ function PostForm({ blogPost }) {
     const userData = useSelector((state) => state.userData)
 
     const submit = async (data) => {
-        if (blogPost) {
+        if (blogPost) { //updating an existing post
             const file = data.image[0] ? service.uploadFile(data.image[0]) : null
             if (file) {
                 service.deleteFile(blogPost.featuredImage)
@@ -29,7 +29,7 @@ function PostForm({ blogPost }) {
             if (dbBlogPost) {
                 navigate(`/post/${dbBlogPost.$id}`)
             }
-        } else {
+        } else { //creating a new post
             const file = data.image[0] ? service.uploadFile(data.image[0]) : null
             if (file) {
                 const fileId = file.$id //extracting the file id from the file
