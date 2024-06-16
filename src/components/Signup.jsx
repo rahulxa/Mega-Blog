@@ -2,12 +2,12 @@ import React from 'react'
 import { useState } from 'react'
 import authService from '../appwrite/auth'
 import { useNavigate, Link } from 'react-router-dom'
-import { login } from '../store /authSlice'
+import { login } from '../store/authSlice'
 import { Button, Input, Logo } from "./index"
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux'
 
-function Signup() {
+export function Signup() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [error, setError] = useState("");
@@ -28,6 +28,8 @@ function Signup() {
             setError(error.message)
         }
     }
+
+
 
     return (
         <div className='flex items-center justify-center'>
@@ -77,16 +79,6 @@ function Signup() {
                             placeholder="Enter your password"
                             {...register("password", {
                                 required: true,
-                                validate: {
-                                    matchPatern: (value) => {
-                                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(value)
-                                            ||
-                                            "password must contain"
-                                        "-at least 8 characters"
-                                        "-must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number"
-                                        "Can contain special characters"
-                                    }
-                                }
                             })}
                         />
                         <Button
@@ -101,4 +93,3 @@ function Signup() {
     )
 }
 
-export default Signup

@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
-import { Button, Input, Select, RTE } from "../index"
-import service from '../../appwrite/config'
+import React, { useCallback, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button, Input, Select, RTE } from "../index";
+import service from '../../appwrite/config';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
@@ -15,32 +15,32 @@ function PostForm({ blogPost }) {
         }
     });
 
-    const navigate = useNavigate()
-    const userData = useSelector((state) => state.userData)
+    const navigate = useNavigate();
+    const userData = useSelector((state) => state.auth.userData);
 
     const submit = async (data) => {
-        if (blogPost) { //updating an existing post
-            const file = data.image[0] ? service.uploadFile(data.image[0]) : null
+        if (blogPost) { // updating an existing post
+            console.log("updating post")
+            const file = data.image[0] ? await service.uploadFile(data.image[0]) : null;
             if (file) {
-                service.deleteFile(blogPost.featuredImage)
+                await service.deleteFile(blogPost.featuredImage);
             }
-            const dbBlogPost = await service.updatePost(blogPost.$id, { ...data, featuredImage: file ? file.$id : undefined })
+            const dbBlogPost = await service.updatePost(blogPost.$id, { ...data, featuredImage: file ? file.$id : undefined });
 
             if (dbBlogPost) {
-                navigate(`/post/${dbBlogPost.$id}`)
+                navigate(`/post/${dbBlogPost.$id}`);
             }
-        } else { //creating a new post
-            const file = data.image[0] ? service.uploadFile(data.image[0]) : null
+        } else { // creating a new post
+            const file = data.image[0] ? await service.uploadFile(data.image[0]) : null;
             if (file) {
-                const fileId = file.$id //extracting the file id from the file
-                data.featuredImage = fileId //setting the FeaturedImage to file id as FeaturedImage is the id of the post
-                const dbPost = await service.createPost({ //creating a new blog post
-                    ...data,
-                    userId: userData.$id //user id getting this from the state
-                })
-                if (dbPost) {
-                    navigate(`/post/${dbPost.$id}`)
-                }
+                data.featuredImage = file.$id;
+            }
+            const dbPost = await service.createPost({
+                ...data,
+                userId: userData.$id
+            });
+            if (dbPost) {
+                navigate(`/post/${dbPost.$id}`);
             }
         }
     }
@@ -50,23 +50,25 @@ function PostForm({ blogPost }) {
             return value
                 .trim()
                 .toLowerCase()
-                .replace(/^[a-zA-Z\d\s]+/g, '-')
-                .replace(/\s/g, '-')
+                .replace(/[^a-z0-9\s-]/g, '') // Remove invalid characters
+                .replace(/\s+/g, '-') // Replace spaces with hyphens
+                .replace(/^-+|-+$/g, '') // Remove leading or trailing hyphens
+                .slice(0, 36); // Ensure the slug is at most 36 characters
         } else {
-            return ""
+            return "";
         }
-    })
+    }, []);
 
     useEffect(() => {
         const subscription = watch((value, { name }) => {
             if (name === "title") {
-                setValue("slug", slugTransform(value.title, { shouldValidate: true }));
+                setValue("slug", slugTransform(value.title), { shouldValidate: true });
             }
-        })
+        });
         return () => {
-            subscription.unsubscribe()
+            subscription.unsubscribe();
         }
-    }, [watch, slugTransform, setValue])
+    }, [watch, slugTransform, setValue]);
 
     return (
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
@@ -94,13 +96,13 @@ function PostForm({ blogPost }) {
                     type="file"
                     className="mb-4"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
-                    {...register("image", { required: !post })}
+                    {...register("image", { required: !blogPost })}
                 />
-                {post && (
+                {blogPost && (
                     <div className="w-full mb-4">
                         <img
-                            src={service.getFilePreview(post.featuredImage)}
-                            alt={post.title}
+                            src={service.getFilePreview(blogPost.featuredImage)}
+                            alt={blogPost.title}
                             className="rounded-lg"
                         />
                     </div>
@@ -111,12 +113,12 @@ function PostForm({ blogPost }) {
                     className="mb-4"
                     {...register("status", { required: true })}
                 />
-                <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">
-                    {post ? "Update" : "Submit"}
+                <Button type="submit" bgColor={blogPost ? "bg-green-500" : undefined} className="w-full">
+                    {blogPost ? "Update" : "Submit"}
                 </Button>
             </div>
         </form>
-    )
+    );
 }
 
-export default PostForm
+export default PostForm;

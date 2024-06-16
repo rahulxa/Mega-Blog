@@ -8,7 +8,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import Home from './pages/Home.jsx'
 import { Protected, Login } from "./components/index.js"
 //pages
-import Signup from './pages/Signup.jsx'
+import Signup from "./pages/Signup.jsx"
 import AllPosts from './pages/AllPosts.jsx'
 import AddPost from "./pages/AddPost.jsx"
 import Post from './pages/Post.jsx'
