@@ -10,7 +10,7 @@ import Postcard from "./Postcard"
 import Select from "./Select"
 import RTE from "./RTE";
 import PostForm from "./post-form/PostForm";
-import Protected from "./AuthLayout";
+import Protected from "./AuthLayout"
 import Signup from "../pages/Signup";
 
 
