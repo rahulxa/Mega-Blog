@@ -16,10 +16,11 @@ export default function Post() {
 
     useEffect(() => {
         if (slug) {
-            service.getPost(slug).then((post) => {
-                if (post) setPost(post);
-                else navigate("/");
-            });
+            service.getPost(slug)
+                .then((post) => {
+                    if (post) setPost(post);
+                    else navigate("/");
+                });
         } else navigate("/");
     }, [slug, navigate]);
 
