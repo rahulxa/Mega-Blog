@@ -4,7 +4,7 @@ import { Client, ID, Databases, Storage, Query, Flag } from "appwrite"
 export class Service {
     client = new Client();
     databases;
-    bucket; 
+    bucket;
 
     constructor() {
         this.client
@@ -67,19 +67,19 @@ export class Service {
         }
     }
 
-    async getPosts() {
+    async getPosts(queries = [Query.equal("status", "active")]) {
         try {
             return await this.databases.listDocuments(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                Query.equal("status", "active") //query to only get those documents whose status is active
+                queries,
             )
         } catch (error) {
-            console.log("Appwrite service error:", error)
-            return false;
+            console.log("Appwrite serive :: getPosts :: error", error);
+            return false
         }
     }
-
+    
     //File upload methods
     async uploadFile(file) {
         try {

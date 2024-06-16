@@ -11,6 +11,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log("fetching data")
     authService.getCurrentUser()
       .then((userData) => {
         if (userData) {
@@ -27,7 +28,7 @@ function App() {
       <div className="w-full block">
         <Header />
         <main>
-          {/* <Outlet /> */}  
+          <Outlet />
         </main>
         <Footer />
       </div>

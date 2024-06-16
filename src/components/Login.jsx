@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom"
-import { login as storeLogin } from "../store/authSlice"
+import { login as authLogin } from '../store/authSlice'
 import { Button, Input, Logo } from "./index"
 import authService from '../appwrite/auth'
 import { useForm } from "react-hook-form"
@@ -19,10 +19,8 @@ function Login() {
             const session = await authService.login(data) // this is the login from the appwrite database
             if (session) {
                 const userData = await authService.getCurrentUser();
-                if (userData) {
-                    dispatch(storeLogin({ userData: userData })); // this is the login from the store
-                    navigate("/");
-                }
+                if (userData) dispatch(authLogin(userData));
+                navigate("/")
             }
         } catch (error) {
             setError(error.message)
