@@ -20,12 +20,11 @@ function PostForm({ blogPost }) {
 
     const submit = async (data) => {
         if (blogPost) { // updating an existing post
-            console.log("updating post")
             const file = data.image[0] ? await service.uploadFile(data.image[0]) : null;
             if (file) {
                 await service.deleteFile(blogPost.featuredImage);
             }
-            const dbBlogPost = await service.updatePost(blogPost.$id, { ...data, featuredImage: file ? file.$id : undefined });
+            const dbBlogPost = await service.updatePost(blogPost.$id, { ...data, featuredImage: file ? file.$id : null });
 
             if (dbBlogPost) {
                 navigate(`/post/${dbBlogPost.$id}`);
@@ -43,7 +42,7 @@ function PostForm({ blogPost }) {
                 navigate(`/post/${dbPost.$id}`);
             }
         }
-    }
+    };
 
     const slugTransform = useCallback((value) => {
         if (value && typeof value === "string") {
@@ -69,6 +68,7 @@ function PostForm({ blogPost }) {
             subscription.unsubscribe();
         }
     }, [watch, slugTransform, setValue]);
+
 
     return (
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">

@@ -79,7 +79,7 @@ export class Service {
             return false
         }
     }
-    
+
     //File upload methods
     async uploadFile(file) {
         try {
@@ -108,6 +108,7 @@ export class Service {
     }
 
     getFilePreview(fileId) {
+        // console.log("coud not get file id")
         return this.bucket.getFilePreview(
             conf.appwriteBucketId,
             fileId
