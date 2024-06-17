@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button, Input, Select, RTE } from "../index";
 import service from '../../appwrite/config';
@@ -15,16 +15,19 @@ function PostForm({ blogPost }) {
         }
     });
 
+    const [previewImage, setPreviewImage] = useState(blogPost ? service.getFilePreview(blogPost.featuredImage) : null);
+
     const navigate = useNavigate();
     const userData = useSelector((state) => state.auth.userData);
 
     const submit = async (data) => {
+        console.log("this is data:", data)
         if (blogPost) { // updating an existing post
             const file = data.image[0] ? await service.uploadFile(data.image[0]) : null;
             if (file) {
                 await service.deleteFile(blogPost.featuredImage);
             }
-            const dbBlogPost = await service.updatePost(blogPost.$id, { ...data, featuredImage: file ? file.$id : null });
+            const dbBlogPost = await service.updatePost(blogPost.$id, { ...data, featuredImage: file ? file.$id : blogPost.featuredImage });
 
             if (dbBlogPost) {
                 navigate(`/post/${dbBlogPost.$id}`);
@@ -69,6 +72,12 @@ function PostForm({ blogPost }) {
         }
     }, [watch, slugTransform, setValue]);
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setPreviewImage(URL.createObjectURL(file));
+        }
+    };
 
     return (
         <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
@@ -91,18 +100,21 @@ function PostForm({ blogPost }) {
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
             </div>
             <div className="w-1/3 px-2">
-                <Input
+                <input
                     label="Featured Image :"
                     type="file"
                     className="mb-4"
+                    onChange={(e) => {
+                        handleImageChange(e);
+                        register("image").onChange(e);
+                    }}
                     accept="image/png, image/jpg, image/jpeg, image/gif"
-                    {...register("image", { required: !blogPost })}
                 />
-                {blogPost && (
+                {previewImage && (
                     <div className="w-full mb-4">
                         <img
-                            src={service.getFilePreview(blogPost.featuredImage)}
-                            alt={blogPost.title}
+                            src={previewImage}
+                            alt={blogPost ? blogPost.title : "Preview Image"}
                             className="rounded-lg"
                         />
                     </div>
