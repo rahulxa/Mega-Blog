@@ -21,9 +21,10 @@ function PostForm({ blogPost }) {
     const userData = useSelector((state) => state.auth.userData);
 
     const submit = async (data) => {
-        console.log("this is data:", data)
+        console.log("this is data:", data.image[0])
         if (blogPost) { // updating an existing post
             const file = data.image[0] ? await service.uploadFile(data.image[0]) : null;
+            // console.log("this is data image:", data.image)
             if (file) {
                 await service.deleteFile(blogPost.featuredImage);
             }
@@ -32,7 +33,9 @@ function PostForm({ blogPost }) {
             if (dbBlogPost) {
                 navigate(`/post/${dbBlogPost.$id}`);
             }
-        } else { // creating a new post
+        }
+        else { // creating a new post
+            // console.log("this is data:", data.image[0])
             const file = data.image[0] ? await service.uploadFile(data.image[0]) : null;
             if (file) {
                 data.featuredImage = file.$id;
@@ -72,8 +75,10 @@ function PostForm({ blogPost }) {
         }
     }, [watch, slugTransform, setValue]);
 
+
     const handleImageChange = (e) => {
         const file = e.target.files[0];
+        console.log("file", file)
         if (file) {
             setPreviewImage(URL.createObjectURL(file));
         }
@@ -86,13 +91,13 @@ function PostForm({ blogPost }) {
                     label="Title :"
                     placeholder="Title"
                     className="mb-4"
-                    {...register("title", { required: true })}
+                    {...register("title", { required: !blogPost })}
                 />
                 <Input
                     label="Slug :"
                     placeholder="Slug"
                     className="mb-4"
-                    {...register("slug", { required: true })}
+                    {...register("slug", { required: !blogPost })}
                     onInput={(e) => {
                         setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
                     }}
@@ -100,15 +105,16 @@ function PostForm({ blogPost }) {
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
             </div>
             <div className="w-1/3 px-2">
-                <input
+                <Input
                     label="Featured Image :"
                     type="file"
                     className="mb-4"
+                    {...register("image", { required: !blogPost })}
                     onChange={(e) => {
                         handleImageChange(e);
-                        register("image").onChange(e);
                     }}
                     accept="image/png, image/jpg, image/jpeg, image/gif"
+                //
                 />
                 {previewImage && (
                     <div className="w-full mb-4">

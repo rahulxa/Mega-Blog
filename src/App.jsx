@@ -11,7 +11,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("fetching data")
+    // console.log("fetching data")
     authService.getCurrentUser()
       .then((userData) => {
         if (userData) {

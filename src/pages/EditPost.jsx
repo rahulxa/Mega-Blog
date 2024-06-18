@@ -11,11 +11,11 @@ function EditPost() {
 
     useEffect(() => {
         if (slug) {
-            console.log("This is slug:", slug);
+            // console.log("This is slug:", slug);
             service.getPost(slug)
                 .then((post) => {
                     if (post) {
-                        console.log("this is:",post);
+                        // console.log("this is:",post);
                         setBlogPost(post);
                     }
                 })
