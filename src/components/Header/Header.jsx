@@ -26,7 +26,7 @@ function Header() {
         },
         {
             name: "All posts",
-            slug: "/all-posts", 
+            slug: "/all-posts",
             active: !authStatus
         },
         {
@@ -34,6 +34,12 @@ function Header() {
             slug: "/add-post",
             active: authStatus
         },
+        {
+            name: "My posts",
+            slug: "/my-posts",
+            active: authStatus
+        },
+
     ]
 
     return (
@@ -49,11 +55,11 @@ function Header() {
                         {navItems.map((item) =>
                             item.active ? (
                                 <li key={item.name}>
-                                    <button onClick={() => navigate(item.slug) }
+                                    <button onClick={() => navigate(item.slug)}
                                         className='inline-block px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'
                                     >{item.name}
                                     </button>
-                                </li>               
+                                </li>
                             ) : null
                         )}
                         {authStatus && (

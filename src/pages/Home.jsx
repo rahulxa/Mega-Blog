@@ -16,6 +16,10 @@ function Home() {
             })
     }, [])
 
+    // if (posts) {
+    //     console.log(posts.map(post => post.$id))
+    // }
+
 
     if (posts.length === 0) {
         return (
@@ -24,7 +28,7 @@ function Home() {
                     <div className='flex flex-wrap'>
                         <div className='p-2 w-full'>
                             <h1 className='text-2xl font-bold hover:text-gray-500'>
-                               No posts to read currently!
+                                No posts to read currently!
                             </h1>
                         </div>
                     </div>

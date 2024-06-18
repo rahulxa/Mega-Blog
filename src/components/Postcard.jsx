@@ -16,4 +16,4 @@ function Postcard({ $id, title, featuredImage }) {
     )
 }
 
-export default Postcard
+export default Postcard 
