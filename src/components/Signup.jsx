@@ -16,6 +16,7 @@ export function Signup() {
     const signup = async (data) => {
         setError("")
         try {
+            console.log("this is data", data)
             const session = await authService.createAccount(data);
             if (session) {
                 const userData = await authService.getCurrentUser()
