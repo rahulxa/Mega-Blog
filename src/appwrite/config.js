@@ -80,6 +80,18 @@ export class Service {
         }
     }
 
+    async getUserPosts() {
+        try {
+            return await this.databases.listDocuments(
+                conf.appwriteDatabaseId,
+                conf.appwriteCollectionId,
+            )
+        } catch (error) {
+            console.log("Appwrite serive :: getPosts :: error", error);
+            return false
+        }
+    }
+
     //File upload methods
     async uploadFile(file) {
         try {

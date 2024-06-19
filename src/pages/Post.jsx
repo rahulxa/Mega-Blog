@@ -13,14 +13,12 @@ export default function Post() {
     const userData = useSelector((state) => state.auth.userData);
 
     const isAuthor = post && userData ? post.userId === userData.$id : false;
-    // console.log("this is post.userid:",post.userId)
-    // console.log("this is post.userid:",userData.$id)
-
 
     useEffect(() => {
         if (slug) {
             service.getPost(slug)
                 .then((post) => {
+                    console.log("posts", post)
                     if (post) setPost(post);
                     else navigate("/");
                 });
@@ -66,11 +64,9 @@ export default function Post() {
                         <h1 className="text-2xl font-bold">TITLE: {post.title}</h1>
                     </div>
                     <div className="w-full mb-6">
-                        <h2 className="text-xl font-bold mb-4">
-                            <span className="border-b-2 border-black">Article</span>
-                        </h2>
+                        <h2 className="text-xl font-bold mb-4">Article</h2>
                         <div className="text-left browser-css">
-                            {parse(post.content)}
+                            {post.content ? parse(post.content) : ""}
                         </div>
                     </div>
                 </div>
