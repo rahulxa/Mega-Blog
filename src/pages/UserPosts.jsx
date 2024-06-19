@@ -24,9 +24,9 @@ function UserPosts() {
     }, [])
 
     const myPosts = posts.filter(post => post.userId === userData.$id);
-    if (myPosts) {
-        console.log(myPosts.$id)
-    }
+    // if (myPosts) {
+    //     console.log(myPosts.$id)
+    // }
 
     if (myPosts.length === 0) {
         return (
@@ -51,9 +51,9 @@ function UserPosts() {
     } else return (
         <div className='w-full py-8'>
             <Container>
-                <div className='flex flex-wrap'>
+                <div className='flex flex-wrap space-x-4'> {/* Added space-x-4 for horizontal spacing */}
                     {myPosts.map((post) => (
-                        <div key={post.$id}>
+                        <div key={post.$id} className='mb-4'> {/* Adjusted spacing */}
                             <Postcard {...post} />
                         </div>
                     ))}
